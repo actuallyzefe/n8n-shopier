@@ -13,11 +13,11 @@
 	"homepage": "",
 	"author": {
 		"name": "Efe Karakanlı",
-		"email": "hello@efekarakanli.dev"
+		"email": "zefek10@gmail.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/actuallyzefe/n8n-nodes-shopier.git"
+		"url": "https://github.com/actuallyzefe/n8n-shopier"
 	},
 	"engines": {
 		"node": ">=22.16"
