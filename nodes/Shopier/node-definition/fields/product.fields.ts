@@ -1,5 +1,4 @@
 import { INodeProperties } from 'n8n-workflow';
-import { statusOptions } from '../../operations/product.operations';
 
 export const productFields: INodeProperties[] = [
 	// Product ID (for get operation)
@@ -65,48 +64,121 @@ export const productFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			// IMPORTANT: Date filters (dateStart, dateEnd) are temporarily removed due to Shopier API limitations
 			{
-				displayName: 'Category ID',
-				name: 'category_id',
-				type: 'number',
-				default: 0,
-				description: 'Filter by category ID',
-			},
-			{
-				displayName: 'Created From',
-				name: 'created_from',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter products created from this date',
-			},
-			{
-				displayName: 'Created To',
-				name: 'created_to',
-				type: 'dateTime',
-				default: '',
-				description: 'Filter products created until this date',
-			},
-			{
-				displayName: 'Product Name',
-				name: 'name',
-				type: 'string',
-				default: '',
-				description: 'Filter by product name (partial match)',
-			},
-			{
-				displayName: 'SKU',
-				name: 'sku',
-				type: 'string',
-				default: '',
-				description: 'Filter by product SKU',
-			},
-			{
-				displayName: 'Status',
-				name: 'status',
+				displayName: 'Product Type',
+				name: 'productType',
 				type: 'options',
-				options: statusOptions,
+				options: [
+					{
+						name: 'Physical',
+						value: 'physical',
+					},
+					{
+						name: 'Digital',
+						value: 'digital',
+					},
+				],
 				default: '',
-				description: 'Filter by product status',
+				description: 'Filter by a product type',
+			},
+			{
+				displayName: 'Shipping Payer',
+				name: 'shippingPayer',
+				type: 'options',
+				options: [
+					{
+						name: 'Buyer Pays',
+						value: 'buyerPays',
+					},
+					{
+						name: 'Seller Pays',
+						value: 'sellerPays',
+					},
+				],
+				default: '',
+				description: 'Filter by who pays for shipping',
+			},
+			{
+				displayName: 'Stock Status',
+				name: 'stockStatus',
+				type: 'options',
+				options: [
+					{
+						name: 'In Stock',
+						value: 'inStock',
+					},
+					{
+						name: 'Out of Stock',
+						value: 'outOfStock',
+					},
+				],
+				default: '',
+				description: 'Filter by a stock status',
+			},
+			{
+				displayName: 'Category IDs',
+				name: 'categoryId',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+				},
+				default: {},
+				description: 'Filter by product categories by specifying category ID(s)',
+				options: [
+					{
+						name: 'categoryIds',
+						displayName: 'Category IDs',
+						values: [
+							{
+								displayName: 'Category ID',
+								name: 'id',
+								type: 'string',
+								default: '',
+								description: 'Category ID to filter by',
+							},
+						],
+					},
+				],
+			},
+			{
+				displayName: 'Selection IDs',
+				name: 'selectionId',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+				},
+				default: {},
+				description: 'Filter by product selections by specifying selection ID(s)',
+				options: [
+					{
+						name: 'selectionIds',
+						displayName: 'Selection IDs',
+						values: [
+							{
+								displayName: 'Selection ID',
+								name: 'id',
+								type: 'string',
+								default: '',
+								description: 'Selection ID to filter by',
+							},
+						],
+					},
+				],
+			},
+			{
+				displayName: 'Discount',
+				name: 'discount',
+				type: 'boolean',
+				default: '',
+				description: 'Filter by products with discounts',
+			},
+			{
+				displayName: 'Custom Listing',
+				name: 'customListing',
+				type: 'boolean',
+				default: '',
+				description: 'Filter by customized listings',
 			},
 		],
 	},

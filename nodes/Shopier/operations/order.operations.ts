@@ -16,24 +16,17 @@ export async function getOrders(
 
 	let qs: IDataObject = {};
 
-	// Apply filters
-	if (filters.status) {
-		qs.status = filters.status;
+	if (filters.fulfillmentStatus) {
+		qs.fulfillmentStatus = filters.fulfillmentStatus;
 	}
-	if (filters.paymentStatus) {
-		qs.payment_status = filters.paymentStatus;
+	if (filters.refundType) {
+		qs.refundType = filters.refundType;
 	}
-	if (filters.currency) {
-		qs.currency = filters.currency;
+	if (filters.customerEmail) {
+		qs.customerEmail = filters.customerEmail;
 	}
-	if (filters.paymentMethod) {
-		qs.payment_method = filters.paymentMethod;
-	}
-	if (filters.createdFrom) {
-		qs.created_from = filters.createdFrom;
-	}
-	if (filters.createdTo) {
-		qs.created_to = filters.createdTo;
+	if (filters.customerPhone) {
+		qs.customerPhone = filters.customerPhone;
 	}
 
 	let responseData: IDataObject[] = [];

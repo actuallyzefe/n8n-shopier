@@ -17,24 +17,32 @@ export async function getProducts(
 
 	let qs: IDataObject = {};
 
-	// Apply filters
-	if (filters.status) {
-		qs.status = filters.status;
+	if (filters.productType) {
+		qs.productType = filters.productType;
 	}
-	if (filters.category_id) {
-		qs.category_id = filters.category_id;
+	if (filters.shippingPayer) {
+		qs.shippingPayer = filters.shippingPayer;
 	}
-	if (filters.sku) {
-		qs.sku = filters.sku;
+	if (filters.stockStatus) {
+		qs.stockStatus = filters.stockStatus;
 	}
-	if (filters.name) {
-		qs.name = filters.name;
+	if (filters.categoryId && (filters.categoryId as IDataObject).categoryIds) {
+		const categoryIds = (filters.categoryId as IDataObject).categoryIds as IDataObject[];
+		if (categoryIds && categoryIds.length > 0) {
+			qs.categoryId = categoryIds.map((item: IDataObject) => item.id).filter(Boolean);
+		}
 	}
-	if (filters.created_from) {
-		qs.created_from = filters.created_from;
+	if (filters.selectionId && (filters.selectionId as IDataObject).selectionIds) {
+		const selectionIds = (filters.selectionId as IDataObject).selectionIds as IDataObject[];
+		if (selectionIds && selectionIds.length > 0) {
+			qs.selectionId = selectionIds.map((item: IDataObject) => item.id).filter(Boolean);
+		}
 	}
-	if (filters.created_to) {
-		qs.created_to = filters.created_to;
+	if (filters.discount !== undefined && filters.discount !== '') {
+		qs.discount = filters.discount;
+	}
+	if (filters.customListing !== undefined && filters.customListing !== '') {
+		qs.customListing = filters.customListing;
 	}
 
 	let responseData: IDataObject[] = [];
