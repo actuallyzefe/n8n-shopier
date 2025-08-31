@@ -60,7 +60,7 @@ export const orderFields: INodeProperties[] = [
 						value: 'fulfilled',
 					},
 				],
-				default: '',
+				default: 'unfulfilled',
 				description: 'Filter by fulfillment status',
 			},
 			{
@@ -81,7 +81,7 @@ export const orderFields: INodeProperties[] = [
 						value: 'full',
 					},
 				],
-				default: '',
+				default: 'none',
 				description: 'Filter by refund type',
 			},
 			{

@@ -66,57 +66,6 @@ export const productFields: INodeProperties[] = [
 		options: [
 			// IMPORTANT: Date filters (dateStart, dateEnd) are temporarily removed due to Shopier API limitations
 			{
-				displayName: 'Product Type',
-				name: 'productType',
-				type: 'options',
-				options: [
-					{
-						name: 'Physical',
-						value: 'physical',
-					},
-					{
-						name: 'Digital',
-						value: 'digital',
-					},
-				],
-				default: '',
-				description: 'Filter by a product type',
-			},
-			{
-				displayName: 'Shipping Payer',
-				name: 'shippingPayer',
-				type: 'options',
-				options: [
-					{
-						name: 'Buyer Pays',
-						value: 'buyerPays',
-					},
-					{
-						name: 'Seller Pays',
-						value: 'sellerPays',
-					},
-				],
-				default: '',
-				description: 'Filter by who pays for shipping',
-			},
-			{
-				displayName: 'Stock Status',
-				name: 'stockStatus',
-				type: 'options',
-				options: [
-					{
-						name: 'In Stock',
-						value: 'inStock',
-					},
-					{
-						name: 'Out of Stock',
-						value: 'outOfStock',
-					},
-				],
-				default: '',
-				description: 'Filter by a stock status',
-			},
-			{
 				displayName: 'Category IDs',
 				name: 'categoryId',
 				type: 'fixedCollection',
@@ -140,6 +89,37 @@ export const productFields: INodeProperties[] = [
 						],
 					},
 				],
+			},
+			{
+				displayName: 'Custom Listing',
+				name: 'customListing',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to filter by customized listings',
+			},
+			{
+				displayName: 'Discount',
+				name: 'discount',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to filter by products with discounts',
+			},
+			{
+				displayName: 'Product Type',
+				name: 'productType',
+				type: 'options',
+				options: [
+					{
+						name: 'Physical',
+						value: 'physical',
+					},
+					{
+						name: 'Digital',
+						value: 'digital',
+					},
+				],
+				default: 'physical',
+				description: 'Filter by a product type',
 			},
 			{
 				displayName: 'Selection IDs',
@@ -167,18 +147,38 @@ export const productFields: INodeProperties[] = [
 				],
 			},
 			{
-				displayName: 'Discount',
-				name: 'discount',
-				type: 'boolean',
-				default: '',
-				description: 'Filter by products with discounts',
+				displayName: 'Shipping Payer',
+				name: 'shippingPayer',
+				type: 'options',
+				options: [
+					{
+						name: 'Buyer Pays',
+						value: 'buyerPays',
+					},
+					{
+						name: 'Seller Pays',
+						value: 'sellerPays',
+					},
+				],
+				default: 'buyerPays',
+				description: 'Filter by who pays for shipping',
 			},
 			{
-				displayName: 'Custom Listing',
-				name: 'customListing',
-				type: 'boolean',
-				default: '',
-				description: 'Filter by customized listings',
+				displayName: 'Stock Status',
+				name: 'stockStatus',
+				type: 'options',
+				options: [
+					{
+						name: 'In Stock',
+						value: 'inStock',
+					},
+					{
+						name: 'Out of Stock',
+						value: 'outOfStock',
+					},
+				],
+				default: 'inStock',
+				description: 'Filter by a stock status',
 			},
 		],
 	},
