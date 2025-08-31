@@ -1,114 +1,155 @@
 import { INodeProperties } from 'n8n-workflow';
-import { statusOptions } from '../operations/product.operations';
 
-export const productFields: INodeProperties[] = [
-	// Product ID (for get operation)
-	{
-		displayName: 'Product ID',
-		name: 'productId',
-		type: 'string',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['product'],
-				operation: ['get'],
-			},
-		},
-		default: '',
-		description: 'The ID of the product to retrieve',
-	},
+import { productFields } from './fields/product.fields';
 
-	// Return All (for getMany operation)
+export const orderFields: INodeProperties[] = [
+	// Get Many Orders
 	{
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
 		displayOptions: {
 			show: {
-				resource: ['product'],
+				resource: ['order'],
 				operation: ['getMany'],
 			},
 		},
 		default: false,
-		description: 'Whether to return all results using auto-pagination or only a single page',
+		description: 'Whether to return all results or only up to a given limit',
 	},
-
-	// Limit (for getMany operation)
 	{
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
 		displayOptions: {
 			show: {
-				resource: ['product'],
+				resource: ['order'],
 				operation: ['getMany'],
+				returnAll: [false],
 			},
 		},
 		typeOptions: {
 			minValue: 1,
-			maxValue: 50,
 		},
 		default: 50,
-		description: 'Max number of results to return per page (used for pagination when Return All is enabled)',
+		description: 'Max number of results to return',
 	},
-
-	// Filters (for getMany operation)
 	{
 		displayName: 'Filters',
 		name: 'filters',
 		type: 'collection',
 		placeholder: 'Add Filter',
+		default: {},
 		displayOptions: {
 			show: {
-				resource: ['product'],
+				resource: ['order'],
 				operation: ['getMany'],
 			},
 		},
-		default: {},
 		options: [
 			{
-				displayName: 'Category ID',
-				name: 'category_id',
-				type: 'number',
-				default: 0,
-				description: 'Filter by category ID',
-			},
-			{
 				displayName: 'Created From',
-				name: 'created_from',
+				name: 'createdFrom',
 				type: 'dateTime',
 				default: '',
-				description: 'Filter products created from this date',
+				description: 'Filter orders created from this date',
 			},
 			{
 				displayName: 'Created To',
-				name: 'created_to',
+				name: 'createdTo',
 				type: 'dateTime',
 				default: '',
-				description: 'Filter products created until this date',
+				description: 'Filter orders created until this date',
 			},
 			{
-				displayName: 'Product Name',
-				name: 'name',
-				type: 'string',
-				default: '',
-				description: 'Filter by product name (partial match)',
+				displayName: 'Currency',
+				name: 'currency',
+				type: 'options',
+				options: [
+					{
+						name: 'TRY',
+						value: 'TRY',
+					},
+					{
+						name: 'USD',
+						value: 'USD',
+					},
+					{
+						name: 'EUR',
+						value: 'EUR',
+					},
+				],
+				default: 'TRY',
+				description: 'Filter by currency',
 			},
 			{
-				displayName: 'SKU',
-				name: 'sku',
-				type: 'string',
-				default: '',
-				description: 'Filter by product SKU',
+				displayName: 'Payment Method',
+				name: 'paymentMethod',
+				type: 'options',
+				options: [
+					{
+						name: 'Debit Card',
+						value: 'debitCard',
+					},
+					{
+						name: 'Credit Card',
+						value: 'creditCard',
+					},
+				],
+				default: 'debitCard',
+				description: 'Filter by payment method',
+			},
+			{
+				displayName: 'Payment Status',
+				name: 'paymentStatus',
+				type: 'options',
+				options: [
+					{
+						name: 'Paid',
+						value: 'paid',
+					},
+					{
+						name: 'Unpaid',
+						value: 'unpaid',
+					},
+				],
+				default: 'paid',
+				description: 'Filter by payment status',
 			},
 			{
 				displayName: 'Status',
 				name: 'status',
 				type: 'options',
-				options: statusOptions,
-				default: '',
-				description: 'Filter by product status',
+				options: [
+					{
+						name: 'Fulfilled',
+						value: 'fulfilled',
+					},
+					{
+						name: 'Unfulfilled',
+						value: 'unfulfilled',
+					},
+				],
+				default: 'fulfilled',
+				description: 'Filter by order status',
 			},
 		],
 	},
+	// Get Order
+	{
+		displayName: 'Order ID',
+		name: 'orderId',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['order'],
+				operation: ['get', 'getTransaction'],
+			},
+		},
+		default: '',
+		description: 'The ID of the order to retrieve',
+	},
 ];
+
+export const fields: INodeProperties[] = [...productFields, ...orderFields];

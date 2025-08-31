@@ -6,4 +6,9 @@ export const resources: INodePropertyOptions[] = [
 		value: 'product',
 		description: 'Work with products',
 	},
+	{
+		name: 'Order',
+		value: 'order',
+		description: 'Work with orders',
+	},
 ];

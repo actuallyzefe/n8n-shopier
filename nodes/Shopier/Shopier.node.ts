@@ -7,8 +7,8 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
-import { productFields } from './node-definition';
-import { getProduct, getProducts } from './operations';
+import { fields } from './node-definition';
+import { getProduct, getProducts, getOrders, getOrder, getOrderTransaction } from './operations';
 import { ShopierResource, ShopierOperation } from './types';
 
 export class Shopier implements INodeType {
@@ -50,6 +50,11 @@ export class Shopier implements INodeType {
 						value: 'product',
 						description: 'Work with products',
 					},
+					{
+						name: 'Order',
+						value: 'order',
+						description: 'Work with orders',
+					},
 				],
 				default: 'product',
 			},
@@ -79,7 +84,39 @@ export class Shopier implements INodeType {
 				],
 				default: 'getMany',
 			},
-			...productFields,
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['order'],
+					},
+				},
+				options: [
+					{
+						name: 'Get Many',
+						value: 'getMany',
+						description: 'Retrieve many orders',
+						action: 'Get many orders',
+					},
+					{
+						name: 'Get',
+						value: 'get',
+						description: 'Retrieve an order',
+						action: 'Get an order',
+					},
+					{
+						name: 'Get Transaction',
+						value: 'getTransaction',
+						description: 'Retrieve an order transaction',
+						action: 'Get an order transaction',
+					},
+				],
+				default: 'getMany',
+			},
+			...fields,
 		],
 	};
 
@@ -100,6 +137,21 @@ export class Shopier implements INodeType {
 						responseData = await getProducts.call(this, i);
 					} else if (operation === 'get') {
 						responseData = await getProduct.call(this, i);
+					} else {
+						throw new NodeOperationError(
+							this.getNode(),
+							`The operation "${operation}" is not supported for resource "${resource}"`,
+							{ itemIndex: i },
+						);
+					}
+				} else if (resource === 'order') {
+					if (operation === 'getMany') {
+						this.logger.info('Getting many orders');
+						responseData = await getOrders.call(this, i);
+					} else if (operation === 'get') {
+						responseData = await getOrder.call(this, i);
+					} else if (operation === 'getTransaction') {
+						responseData = await getOrderTransaction.call(this, i);
 					} else {
 						throw new NodeOperationError(
 							this.getNode(),

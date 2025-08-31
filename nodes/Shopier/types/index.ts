@@ -33,10 +33,195 @@ export interface IProductsResponse {
 	};
 }
 
+// Order Types
+export interface IOrderLineItem {
+	productId: string;
+	title: string;
+	type: 'physical' | 'digital';
+	selection?: Array<{
+		id: string;
+		title: string;
+		variationTitle: string;
+		options: Array<{
+			id: string;
+			title: string;
+		}>;
+	}>;
+	quantity: number;
+	price: string;
+	total: string;
+}
+
+export interface IOrderTotals {
+	subtotal: string;
+	shipping: string;
+	discount: string;
+	total: string;
+}
+
+export interface IOrderDiscount {
+	id: string;
+	method: 'discountCode' | 'automaticDiscount';
+}
+
+export interface IOrderShippingInfo {
+	firstName: string;
+	lastName: string;
+	nationalId?: string;
+	email: string;
+	phone: string;
+	company?: string;
+	address: string;
+	district?: string;
+	city: string;
+	state?: string;
+	postcode: string;
+	country: string;
+}
+
+export interface IOrderBillingInfo {
+	firstName: string;
+	lastName: string;
+	nationalId?: string;
+	email: string;
+	phone: string;
+	company?: string;
+	taxOffice?: string;
+	taxNumber?: string;
+	address: string;
+	district?: string;
+	city: string;
+	state?: string;
+	postcode: string;
+	country: string;
+}
+
+export interface IOrderFulfillment {
+	orderId: string;
+	status: 'shipped' | 'notShipped';
+	method: 'standard' | 'contracted';
+	type: 'firstShipment' | 'secondShipment' | 'returnShipment';
+	dateCreated: string;
+	dateDispatched?: string;
+	company?: string;
+	code?: string;
+	trackingNumber?: string;
+	trackingUrl?: string;
+	size?: string;
+	sizeUnit?: 'deci';
+	weight?: string;
+	weightUnit?: 'gram' | 'kilogram';
+	cost?: string;
+	currency?: 'TRY' | 'USD' | 'EUR';
+}
+
+export interface IOrderReturn {
+	orderId: string;
+	status: 'shipped' | 'notShipped';
+	method: 'standard' | 'contracted';
+	type: 'firstShipment' | 'secondShipment' | 'returnShipment';
+	dateCreated: string;
+	dateDispatched?: string;
+	company?: string;
+	code?: string;
+	trackingNumber?: string;
+	trackingUrl?: string;
+	size?: string;
+	sizeUnit?: 'deci';
+	weight?: string;
+	weightUnit?: 'gram' | 'kilogram';
+	cost?: string;
+	currency?: 'TRY' | 'USD' | 'EUR';
+}
+
+export interface IOrderRefund {
+	id: string;
+	type: 'full' | 'partial';
+	status: 'pending' | 'failed' | 'succeeded';
+	dateCreated: string;
+	dateRefunded?: string;
+	total: string;
+}
+
+export interface IOrder {
+	id: string;
+	status: 'fulfilled' | 'unfulfilled';
+	paymentStatus: 'paid' | 'unpaid';
+	installments: boolean;
+	dateCreated: string;
+	currency: 'TRY' | 'USD' | 'EUR';
+	paymentMethod: 'debitCard' | 'creditCard';
+	totals: IOrderTotals;
+	discounts: IOrderDiscount[];
+	shippingInfo: IOrderShippingInfo;
+	billingInfo?: IOrderBillingInfo;
+	note?: string;
+	lineItems: IOrderLineItem[];
+	fulfillments: IOrderFulfillment[];
+	returns: IOrderReturn[];
+	refunds: IOrderRefund[];
+}
+
+export interface IOrdersResponse {
+	data: IOrder[];
+	meta: {
+		current_page: number;
+		from: number;
+		last_page: number;
+		per_page: number;
+		to: number;
+		total: number;
+	};
+}
+
+// Transaction Types
+export interface ITransactionFee {
+	currency: 'TRY' | 'USD' | 'EUR';
+	amount: string;
+}
+
+export interface ITransactionFeeDetail {
+	type: 'serviceFee' | 'shippingFee' | 'vat';
+	currency: 'TRY' | 'USD' | 'EUR';
+	amount: string;
+}
+
+export interface ITransactionGross {
+	originCurrency: 'TRY' | 'USD' | 'EUR';
+	originAmount: string;
+	payoutCurrency: 'TRY' | 'USD' | 'EUR';
+	payoutAmount: string;
+	exchangeRate: string;
+}
+
+export interface ITransactionInstallments {
+	term: number;
+	currency: 'TRY' | 'USD' | 'EUR';
+	interestCost: string;
+	costBearer: 'buyer' | 'seller';
+}
+
+export interface ITransactionNet {
+	payoutCurrency: 'TRY' | 'USD' | 'EUR';
+	payoutAmount: string;
+}
+
+export interface IOrderTransaction {
+	orderId: string;
+	type: 'charge' | 'adjustment';
+	description: string;
+	dateCreated: string;
+	gross: ITransactionGross;
+	fee: ITransactionFee[];
+	feeDetails: ITransactionFeeDetail[];
+	installments: ITransactionInstallments;
+	net: ITransactionNet[];
+}
+
 export interface IShopierCredentials {
 	accessToken: string;
 }
 
-export type ShopierResource = 'product';
+export type ShopierResource = 'product' | 'order';
 
-export type ShopierOperation = 'getMany' | 'get';
+export type ShopierOperation = 'getMany' | 'get' | 'getTransaction';
