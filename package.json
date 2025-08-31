@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-shopier",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "n8n community node for Shopier. Enables automation with Shopier's API, including product management and integration with other services.",
 	"keywords": [
 		"n8n-community-node-package",
