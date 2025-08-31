@@ -70,6 +70,57 @@ This Shopier node provides comprehensive integration with the Shopier API, suppo
 
 - `Get` - Retrieve a specific product by ID with detailed information
 
+### **Orders**
+
+- `Get Many` - Retrieve all orders with comprehensive filtering options
+- `Get` - Retrieve a specific order by ID with detailed information
+- `Get Transaction` - Retrieve order transaction details
+
+### **Webhooks**
+
+The Shopier Trigger node enables real-time event notifications from Shopier. When you build your app, you have the option of registering for webhooks and receiving event notifications. We recommend using webhooks for instantly receiving event notifications, instead of polling the API, since webhooks will not count towards rate limits.
+
+#### **Available Webhook Events**
+
+- `product.created` - When a new product is listed via seller's Shopier account or Shopier API
+- `product.updated` - When an existing product is updated via seller's Shopier account or Shopier API
+- `order.created` - When an order is created
+- `order.addressUpdated` - When the buyer address is updated for an existing order
+- `order.fulfilled` - When an existing order is fulfilled by the seller via seller's Shopier account and/or Shopier API
+- `refund.requested` - When a new refund is requested by the seller via seller's Shopier account or Shopier API
+- `refund.updated` - When a refund is either succeeded or failed
+
+#### **Webhook Headers**
+
+All webhook events include the following HTTP headers:
+
+| Header              | Description                                                                  |
+| ------------------- | ---------------------------------------------------------------------------- |
+| Content-Length      | Size of the message body, in bytes                                           |
+| Content-Type        | Media type of the resource (always application/json)                         |
+| Host                | Your Notification URL                                                        |
+| User-Agent          | Specifies the entity that sent the webhook event (e.g. Shopier-Hookshot/1.0) |
+| Shopier-Api-Version | Version of the Shopier API                                                   |
+| Shopier-Account-Id  | The account ID of the shop                                                   |
+| Shopier-Event       | Type of the webhook event                                                    |
+| Shopier-Webhook-Id  | Unique ID of the webhook                                                     |
+| Shopier-Timestamp   | The Unix epoch timestamp in seconds (UTC time standard)                      |
+| Shopier-Signature   | Signature of the event notification signed using HS256                       |
+
+#### **Webhook Retry Schedule**
+
+If your webhook handler does not respond with a 200 OK HTTP status code within 5 seconds, Shopier will retry sending the webhook up to 9 times using the following schedule:
+
+- Attempt 1 → 1 minute after initial failure
+- Attempt 2 → 10 minutes after initial failure
+- Attempt 3 → 1 hour after initial failure
+- Attempt 4 → 2 hours after initial failure
+- Attempt 5 → 4 hours after initial failure
+- Attempt 6 → 8 hours after initial failure
+- Attempt 7 → 24 hours after initial failure
+- Attempt 8 → 48 hours after initial failure
+- Attempt 9 → 72 hours after initial failure
+
 ## Credentials
 
 To use this node, you need to authenticate with Shopier using your API credentials. Here's how to set it up:
@@ -115,6 +166,33 @@ This node uses the Shopier API and should be compatible with all current Shopier
 ### Resource Operations
 
 **Product Operations**: Retrieve and filter your product catalog with comprehensive filtering options matching official Shopier API specifications.
+
+**Order Operations**: Access order information with comprehensive filtering by date ranges, status, and other criteria.
+
+### Webhook Setup
+
+To use the Shopier Trigger node for webhook events:
+
+1. **Create a Webhook Handler**
+
+   - Build your own custom endpoint (Notification URL) on your server as a webhook handler
+   - Your webhook handler must be capable of:
+     - Receiving POST requests from Shopier when events arise
+     - Receiving the notification events via HTTPS connections
+     - Reading both header and body
+     - Returning 200 OK HTTP status code to Shopier within 5 seconds
+
+2. **Register for Webhooks**
+
+   - Go to your Shopier app's configuration page
+   - Navigate to the Webhooks section
+   - Add at least one webhook and select the webhook event type
+   - Enter the Notification URL for each of the added events
+   - This will be the URL where the event notifications will be sent
+
+3. **Configure the Trigger Node**
+   - Add the Shopier Trigger node to your workflow
+   - Select the events you want to listen for
 
 ### Advanced Configuration
 
@@ -204,6 +282,7 @@ Found a bug or have a feature request? Please check existing issues first, then 
 ├── nodes/
 │   └── Shopier/
 │       ├── Shopier.node.ts        # Main node orchestrator
+│       ├── ShopierTrigger.node.ts # Webhook trigger node
 │       ├── GenericFunctions.ts    # Shared utility functions
 │       ├── types/                 # TypeScript type definitions
 │       │   └── index.ts

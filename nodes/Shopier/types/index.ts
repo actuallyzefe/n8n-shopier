@@ -201,6 +201,8 @@ export interface ITransactionInstallments {
 	costBearer: 'buyer' | 'seller';
 }
 
+import { IDataObject } from 'n8n-workflow';
+
 export interface ITransactionNet {
 	payoutCurrency: 'TRY' | 'USD' | 'EUR';
 	payoutAmount: string;
@@ -225,3 +227,47 @@ export interface IShopierCredentials {
 export type ShopierResource = 'product' | 'order';
 
 export type ShopierOperation = 'getMany' | 'get' | 'getTransaction';
+
+// Webhook Types
+export type ShopierWebhookEvent =
+	| 'product.created'
+	| 'product.updated'
+	| 'order.created'
+	| 'order.addressUpdated'
+	| 'order.fulfilled'
+	| 'refund.requested'
+	| 'refund.updated';
+
+export interface IShopierWebhookHeaders {
+	'content-length'?: string;
+	'content-type'?: string;
+	host?: string;
+	'user-agent'?: string;
+	'shopier-api-version'?: string;
+	'shopier-account-id'?: string;
+	'shopier-event'?: ShopierWebhookEvent;
+	'shopier-webhook-id'?: string;
+	'shopier-timestamp'?: string;
+	'shopier-signature'?: string;
+}
+
+export interface IShopierWebhookPayload {
+	event: ShopierWebhookEvent;
+	accountId: string;
+	webhookId: string;
+	timestamp: string;
+	apiVersion: string;
+	data: IDataObject;
+}
+
+// Refund Types for webhooks
+export interface IRefund {
+	id: string;
+	orderId: string;
+	status: 'pending' | 'succeeded' | 'failed';
+	amount: string;
+	currency: 'TRY' | 'USD' | 'EUR';
+	reason?: string;
+	dateCreated: string;
+	dateUpdated?: string;
+}
